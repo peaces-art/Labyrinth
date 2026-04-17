@@ -328,8 +328,10 @@ function onDeviceOrientation(e) {
   dBeta  = Math.max(-30, Math.min(30, dBeta));
   dGamma = Math.max(-30, Math.min(30, dGamma));
 
-  gyroTiltX = (dBeta  / 30) * MAX_TILT;
-  gyroTiltZ = -(dGamma / 30) * MAX_TILT;
+  // beta  = phone tilts forward (top away) → ball rolls forward (+Z) → positive tiltX
+  // gamma = phone tilts right            → ball rolls right  (+X) → negative tiltZ
+  gyroTiltX = -(dBeta  / 30) * MAX_TILT;
+  gyroTiltZ =  (dGamma / 30) * MAX_TILT;
 }
 
 function enableGyro() {
@@ -395,8 +397,8 @@ function update(dt) {
   } else {
     if (keys['ArrowUp']    || keys['KeyW']) tiltX = Math.max(tiltX - TILT_SPEED, -MAX_TILT);
     if (keys['ArrowDown']  || keys['KeyS']) tiltX = Math.min(tiltX + TILT_SPEED,  MAX_TILT);
-    if (keys['ArrowLeft']  || keys['KeyA']) tiltZ = Math.min(tiltZ + TILT_SPEED,  MAX_TILT);
-    if (keys['ArrowRight'] || keys['KeyD']) tiltZ = Math.max(tiltZ - TILT_SPEED, -MAX_TILT);
+    if (keys['ArrowLeft']  || keys['KeyA']) tiltZ = Math.max(tiltZ - TILT_SPEED, -MAX_TILT);
+    if (keys['ArrowRight'] || keys['KeyD']) tiltZ = Math.min(tiltZ + TILT_SPEED,  MAX_TILT);
 
     // Tilt spring-back when no input
     if (!keys['ArrowUp'] && !keys['KeyW'] && !keys['ArrowDown'] && !keys['KeyS'])
